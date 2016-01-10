@@ -36,7 +36,21 @@
 
 <div id="tab-concursos-nuevo" class="post_blanco tab">
 	<h2>Crear un concurso</h2>
-	<?php include("parcial_nuevoconcurso.php"); ?>
+<?php
+	if(isset($_REQUEST["cname"])){
+		$result = c_concurso::nuevo();
+		if($result){
+?>
+		<div><p>¡Concurso creado exitosamente!</p></div>
+<?php			
+		}else{
+?>
+		<div><p><?php echo $msg; ?></p></div>
+<?php			
+		}
+	}
+?>
+	<?php include("parcial_nuevoconcurso.php");?>
 </div>
 
 <div id="tab-concursos-activos" class="post_blanco tab">
@@ -75,7 +89,12 @@
 	}
 ?>
 </div>
-
+<br/>
 
 <?php include_once("post_footer.php"); ?>
-
+<script type="text/javascript">
+	var show = window.location.hash;
+	show = (show) ? show : 'futuros';
+	show = show.replace('#','');
+	ShowTab( 'tab-concursos-'+show);
+</script>
