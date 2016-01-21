@@ -1,0 +1,2 @@
+cd /var/tmp/teddy/work_zone/$1
+node $1.js USER_CODE $2

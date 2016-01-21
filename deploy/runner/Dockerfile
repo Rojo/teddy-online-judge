@@ -33,5 +33,6 @@ RUN apt-get -y install openjdk-8-jdk
 RUN apt-get -y install php5 php5-cli
 RUN apt-get -y install gcc g++
 RUN apt-get -y install ruby
+RUN apt-get -y install nodejs
 
 CMD ["/usr/bin/supervisord"]
