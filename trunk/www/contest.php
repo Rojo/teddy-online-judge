@@ -27,7 +27,7 @@
 		</li>
 		<li  class="subtab rightmost-tab">
 			<a href="#nuevo" onclick="ShowTab( 'tab-concursos-nuevo', this);">
-			<span>Crar un concurso</span>
+			<span>Crear un concurso</span>
 			</a>
 		</li>
 	</ul>
