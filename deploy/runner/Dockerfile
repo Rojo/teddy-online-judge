@@ -32,6 +32,6 @@ ADD conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN apt-get -y install openjdk-8-jdk
 RUN apt-get -y install php5 php5-cli
 RUN apt-get -y install gcc g++
+RUN apt-get -y install ruby
 
 CMD ["/usr/bin/supervisord"]
-

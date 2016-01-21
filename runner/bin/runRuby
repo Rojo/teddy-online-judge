@@ -1,0 +1,2 @@
+cd /var/tmp/teddy/work_zone/$1
+ruby $1.rb USER_CODE $2
