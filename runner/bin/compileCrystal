@@ -1,0 +1,2 @@
+cd /var/tmp/teddy/work_zone/$1
+crystal build $2.cr --release
