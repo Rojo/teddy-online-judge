@@ -1,3 +1,2 @@
 cd /var/tmp/teddy/work_zone/$1
 php $1.php USER_CODE $2
-
