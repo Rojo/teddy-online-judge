@@ -1,0 +1,2 @@
+cd /var/tmp/teddy/work_zone/$1
+mono $1.exe USER_CODE $2

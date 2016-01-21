@@ -34,5 +34,9 @@ RUN apt-get -y install php5 php5-cli
 RUN apt-get -y install gcc g++
 RUN apt-get -y install ruby
 RUN apt-get -y install nodejs
+RUN curl http://dist.crystal-lang.org/apt/setup.sh | bash
+RUN apt-get -y install crystal
+RUN apt-get -y install mono-gmcs
+
 
 CMD ["/usr/bin/supervisord"]
