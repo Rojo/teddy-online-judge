@@ -32,6 +32,12 @@ ADD conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN apt-get -y install openjdk-8-jdk
 RUN apt-get -y install php5 php5-cli
 RUN apt-get -y install gcc g++
+RUN apt-get -y install ruby
+RUN apt-get -y install nodejs
+RUN curl http://dist.crystal-lang.org/apt/setup.sh | bash
+RUN apt-get -y install crystal
+RUN apt-get -y install mono-gmcs
+RUN apt-get -y install elixir
+
 
 CMD ["/usr/bin/supervisord"]
-
