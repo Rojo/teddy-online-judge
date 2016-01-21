@@ -37,6 +37,7 @@ RUN apt-get -y install nodejs
 RUN curl http://dist.crystal-lang.org/apt/setup.sh | bash
 RUN apt-get -y install crystal
 RUN apt-get -y install mono-gmcs
+RUN apt-get -y install elixir
 
 
 CMD ["/usr/bin/supervisord"]
