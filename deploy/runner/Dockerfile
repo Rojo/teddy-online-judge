@@ -38,6 +38,7 @@ RUN curl http://dist.crystal-lang.org/apt/setup.sh | bash
 RUN apt-get -y install crystal
 RUN apt-get -y install mono-gmcs
 RUN apt-get -y install elixir
+RUN apt-get -y install golang
 
 
 CMD ["/usr/bin/supervisord"]

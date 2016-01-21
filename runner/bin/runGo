@@ -1,0 +1,2 @@
+cd /var/tmp/teddy/work_zone/$1
+go run $1.py USER_CODE $2
