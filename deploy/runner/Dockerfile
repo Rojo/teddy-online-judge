@@ -14,7 +14,7 @@ RUN apt-get -y install supervisor
 RUN apt-get -y install git
 RUN apt-get -y install mysql-server mysql-client
 RUN apt-get -y install curl
-
+RUN apt-get -y install wget
 RUN apt-get -y install vim
 
 RUN mkdir --parents /opt/teddy/runner
@@ -38,6 +38,9 @@ RUN curl http://dist.crystal-lang.org/apt/setup.sh | bash
 RUN apt-get -y install crystal
 RUN apt-get -y install mono-gmcs
 RUN apt-get -y install elixir
-
+RUN wget https://static.rust-lang.org/rustup.sh
+RUN chmod +x rustup.sh
+RUN ./rustup.sh -y --disable-sudo
+RUN rm rustup.sh
 
 CMD ["/usr/bin/supervisord"]
