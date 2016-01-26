@@ -31,15 +31,16 @@ RUN apt-get -y install supervisor \
   mono-gmcs \
   elixir
 
-# Crystal needs curl, so gets its own APT line
+# Compilers and interpreters that require extra steps
+## Crystal needs curl, so it gets its own APT line
 RUN curl http://dist.crystal-lang.org/apt/setup.sh | bash
 RUN apt-get -y install crystal
 
-# Manually installed compilers and interpreters
 ## Rust
 RUN wget https://static.rust-lang.org/rustup.sh
 RUN chmod +x rustup.sh
 RUN ./rustup.sh -y --disable-sudo
+
 ## Apple Swift
 RUN wget https://swift.org/builds/ubuntu1510/swift-2.2-SNAPSHOT-2016-01-11-a/swift-2.2-SNAPSHOT-2016-01-11-a-ubuntu15.10.tar.gz
 RUN tar -xvzf swift-2.2-SNAPSHOT-2016-01-11-a-ubuntu15.10.tar.gz
