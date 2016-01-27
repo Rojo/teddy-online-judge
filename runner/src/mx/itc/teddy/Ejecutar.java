@@ -3,11 +3,11 @@ package mx.itc.teddy;
 import java.io.*;
 
 public class Ejecutar implements Runnable{
-	
+
 	private String execID;
 	private String LANG;
 	final private boolean imprimirSalida = true;
-	public String status = "TIME";	
+	public String status = "TIME";
 	private Process proc;
 	private String PID;
 	private String comando;
@@ -61,13 +61,13 @@ public class Ejecutar implements Runnable{
 
 			//si es C
 			if(LANG.equals("C")){
-				comando = "./runC " + execID  + " " + uid; 
+				comando = "./runC " + execID  + " " + uid;
 				killcomand = "a.out USER_CODE " + uid;
 			}
 
 			//si es C++
 			if(LANG.equals("C++")){
-				comando = "./runC " + execID  + " " + Math.random(); 
+				comando = "./runC " + execID  + " " + Math.random();
 				killcomand = "a.out USER_CODE " + uid;
 			}
 
@@ -112,10 +112,10 @@ public class Ejecutar implements Runnable{
 			}
 
 			//alguna exception del progrma invitado
-			if( exitVal != 0 ) { 
+			if( exitVal != 0 ) {
 				System.out.println(exitVal);
 				status = "EXCEPTION";
-				return; 
+				return;
 			}
 
 			//avisar al otro hilo que hemos terminado

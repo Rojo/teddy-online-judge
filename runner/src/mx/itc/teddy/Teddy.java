@@ -259,9 +259,9 @@ public class Teddy {
 		// agregar un nuevo intento a este chavo
 		con.update("UPDATE Usuario SET tried = tried + 1  WHERE userID = '"+ userID +"' LIMIT 1 ;");
 
-		// --------------compilar el codigo fuente-----------------------------------//
+		// --------------compile el codigo fuente-----------------------------------//
 
-		// obvio depende de que voy a compilar
+		// obvio depende de que voy a compile
 
 		// al constructor se le proporciona la ruta hasta el .java
 		Compilador c = new Compilador();
@@ -340,7 +340,7 @@ public class Teddy {
 
 		// aqui esta lo bueno, ejecutar el codigo... sniff
 		// por el momento al la clase ejecutar solo le pasaremos
-		// el execID y con eso ejecutara el Main que este dentro o el a.out etc 
+		// el execID y con eso ejecutara el Main que este dentro o el a.out etc
 		Ejecutar e = new Ejecutar(execID);
 
 		// decirle que lenguaje es... pudiera ser c, c++, python, etc
