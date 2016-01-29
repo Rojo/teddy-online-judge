@@ -1,12 +1,12 @@
 #!/bin/bash
-#Autor: lesthack@gmail.com
+-#Autor: lesthack@gmail.com
 
-PID=`/bin/pidof $1`
+PID= eval "ps -eo pid,args | pgrep -fx '$1'"
 
 if [ "$PID" = "" ] ; then
 	echo "None"
 else
 	kill $PID
-	echo "[$PID] eliminados"    
+	echo "[$PID] eliminado"
 fi
 
