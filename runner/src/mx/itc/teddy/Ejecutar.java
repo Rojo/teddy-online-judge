@@ -4,14 +4,14 @@ import java.io.*;
 
 public class Ejecutar implements Runnable{
 
+	private final  boolean printOutput = true;
 	private String execID;
 	private String LANG;
-	final private boolean imprimirSalida = true;
-	public String status = "TIME";
 	private Process proc;
 	private String PID;
-	private String comando;
-	private String killcomand;
+	private String command;
+	private String killcommand;
+  public String status = "TIME";
 
 	public void destroyProc(){
 		proc.destroy();
@@ -19,69 +19,70 @@ public class Ejecutar implements Runnable{
 	}
 
 	public void destroyPID(){
-		//destruid pid con kill
-		try{
-			proc = Runtime.getRuntime().exec("./killprocess " + killcomand);
-		}catch(IOException ioe){
+		// destruir pid con kill
+		try {
+			proc = Runtime.getRuntime().exec("./killprocess " + killcommand);
+		} catch(IOException ioe) {
 			System.out.println(ioe);
 		}
 	}
 
 	public void run(){
+
 		synchronized(this){
 
-			//ubicacion de el script sh externo
-			comando = "";
+			// ubicacion de el script sh externo
+			command = "";
 
 			double uid = Math.random();
 
-			//genera el comando ke se ejecutara si es java
-			if(LANG.equals("Python")) {
-				comando = "./runPython "+ execID  + " " + uid;
-				killcomand = "python Main.py USER_CODE " + uid;
+			// Comandos por lenguaje
+      if (LANG.equals("C")) {
+        command = "./runC " + execID  + " " + uid;
+        killcommand = "a.out USER_CODE " + uid;
+      }
+
+      if (LANG.equals("C++")) {
+        command = "./runC " + execID  + " " + Math.random();
+        killcommand = "a.out USER_CODE " + uid;
+      }
+
+			if (LANG.equals("Java")) {
+				command = "./runJava " + execID + " " + uid ;
+				killcommand = "java Main USER_CODE " + uid;
 			}
 
-			//genera el comando ke se ejecutara si es java
-			if(LANG.equals("JAVA")){
-				comando = "./runJava " + execID + " " + uid ;
-				killcomand = "java Main USER_CODE " + uid;
+			if (LANG.equals("Perl")) {
+				command = "./runPerl " + execID + " " + uid ;
+				killcommand = "perl Main.pl USER_CODE " + uid;
 			}
 
-			//genera el comando ke se ejecutara si es perl
-			if(LANG.equals("Perl")){
-				comando = "./runPerl " + execID + " " + uid ;
-				killcomand = "perl Main.pl USER_CODE " + uid;
+			if (LANG.equals("PHP")) {
+				command = "./runPHP " + execID + " " + uid ;
+				killcommand = "php "+ execID +".php USER_CODE " + uid;
 			}
 
-			//genera el comando ke se ejecutara si es php
-			if(LANG.equals("Php")){
-				comando = "./runPhp " + execID + " " + uid ;
-				killcomand = "php "+ execID +".php USER_CODE " + uid;
-			}
+      if (LANG.equals("Python")) {
+        command = "./runPython "+ execID  + " " + uid;
+        killcommand = "python Main.py USER_CODE " + uid;
+      }
 
-			//si es C
-			if(LANG.equals("C")){
-				comando = "./runC " + execID  + " " + uid;
-				killcomand = "a.out USER_CODE " + uid;
-			}
-
-			//si es C++
-			if(LANG.equals("C++")){
-				comando = "./runC " + execID  + " " + Math.random();
-				killcomand = "a.out USER_CODE " + uid;
-			}
+      if (LANG.equals("Ruby")) {
+        command = "./runRuby " + execID  + " " + uid;
+        killcommand = "ruby " + execID +".rb USER_CODE " + uid;
+      }
 
 			int exitVal = 0;
 
-			PID = comando;
+			PID = command;
 
-			try{
-				//ejecutar el script
-				proc = Runtime.getRuntime().exec(comando);
+			try {
+				// ejecutar el script
+				proc = Runtime.getRuntime().exec(command);
 
-				if (imprimirSalida) {
+				if (printOutput) {
 
-					//leer salida estandar
+					// leer salida estandar
 					InputStreamReader isr = new InputStreamReader( proc.getInputStream() );
 					BufferedReader br = new BufferedReader(isr);
 					String linea = null;
@@ -90,7 +91,7 @@ public class Ejecutar implements Runnable{
 						TeddyLog.logger.warn("StdOut>" + linea);
 					}
 
-					//leer salida de error
+					// leer salida de error
 					InputStreamReader isr2 = new InputStreamReader( proc.getErrorStream() );
 					BufferedReader br2 = new BufferedReader( isr2 );
 					String linea2 = null;
@@ -100,37 +101,35 @@ public class Ejecutar implements Runnable{
 					}
 				}
 
-				//esperar a que termine el proceso
-				exitVal = proc.waitFor();
+				// esperar a que termine el proceso
+				exitVal =	 proc.waitFor();
 
 			} catch( Exception e ) {
-
-				//error interno del juez
-				//status = "ERROR_JUEZ";
+				// error interno del juez
+				// status = "ERROR_JUEZ";
 				System.out.println("Error, el juez no ha podido ejecutar el programa. \n" + e);
-				//return;
 			}
 
-			//alguna exception del progrma invitado
-			if( exitVal != 0 ) {
+			// alguna exception del progrma invitado
+			if ( exitVal != 0 ) {
 				System.out.println(exitVal);
 				status = "EXCEPTION";
 				return;
 			}
 
-			//avisar al otro hilo que hemos terminado
+			// avisar al otro hilo que hemos terminado
 			status = "OK";
 			notify();
 		}
-	}//run code thread
+	} // run code thread
 
 	void setLang( String lang ){
 		LANG = lang;
 	}
 
-	//constructor
+	// constructor
 	Ejecutar(String s){
 		this.execID = s;
 	}
 
-}//clase ejecutar
+}

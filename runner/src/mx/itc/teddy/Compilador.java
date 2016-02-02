@@ -21,7 +21,7 @@ public class Compilador {
 	public boolean compile() {
 		String command = "";
 
-		// no hay necesidad de compile estos lenguajes
+		// no hay necesidad de compilar estos lenguajes
 		if (Arrays.asList(INTERPRETED).contains(LANG)) { return true; }
 
 		// estos lenguajes sí se compilan
@@ -42,7 +42,7 @@ public class Compilador {
 		TeddyLog.logger.info("Comando para compile > " + command);
 		int exitVal = -1;
 
-		// intentar compile
+		// intentar la compilacion
 		try {
 			Process proc = Runtime.getRuntime().exec(command);
 
