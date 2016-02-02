@@ -2,12 +2,25 @@ package mx.itc.teddy;
 
 import java.sql.*;
 import java.io.*;
+import java.util.*;
 
 public class Teddy {
-	static private Conexion con;
+	static String LANG;
+	private static Conexion con;
 	private static boolean DEBUG;
 	private static boolean FULL_DEBUG ;
-	static String LANG;
+	private static final HashMap<String, String> languages;
+	static {
+		languages = new HashMap<String, String>();
+		languages.put("C", ".c");
+		languages.put("C++", ".cpp");
+		languages.put("C#", ".cs");
+		languages.put("Java", ".java");
+		languages.put("Perl", ".pl");
+		languages.put("PHP", ".php");
+		languages.put("Python", ".py");
+		languages.put("Ruby", ".rb");
+	}
 
 	public static void main( String [] args ) throws IOException {
 		for (String iarg : args) {
@@ -127,11 +140,10 @@ public class Teddy {
 		String probID;
 		String concursoID;
 
-		try{
+		try {
 			TeddyLog.logger.debug("Conectandose a la base de datos.");
 			con = iniciarConexion();
-
-		}catch(Exception e) {
+		} catch(Exception e) {
 			TeddyLog.logger.error("Error al iniciar:");
 			TeddyLog.logger.error(e);
 			return;
@@ -141,15 +153,15 @@ public class Teddy {
 		ResultSet rs = con.query("SELECT * FROM Ejecucion WHERE status = 'WAITING' LIMIT 1;");
 		TeddyLog.logger.debug("SELECT * FROM Ejecucion WHERE status = 'WAITING' LIMIT 1;");
 
-		try{
+		try {
 			if (!rs.next()) {
-				TeddyLog.logger.debug("No runs on wait...");
+				TeddyLog.logger.debug("No hay ejecuciones pendientes...");
 				return;
 			}
 
 			TeddyLog.logger.info( "-------------------------- RUN --------------------------------------");
-			TeddyLog.logger.info( "Total memoria de la maquina virutal : " +  (Runtime.getRuntime().totalMemory() / 1024) + "kb");
-			TeddyLog.logger.info( "There is a run on wait : " + rs.getString("execID") );
+			TeddyLog.logger.info( "Total memoria de la maquina virtual : " +  (Runtime.getRuntime().totalMemory() / 1024) + "kb");
+			TeddyLog.logger.info( "Hay una ejecución pendiente: " + rs.getString("execID") );
 
 			execID = rs.getString("execID");
 			LANG = rs.getString("LANG");
@@ -157,41 +169,13 @@ public class Teddy {
 			probID = rs.getString("probID");
 			concursoID = rs.getString("Concurso");
 
-		}catch(SQLException sqle) {
+		} catch(SQLException sqle) {
 			TeddyLog.logger.info("Error al contactar la BD:" + sqle);
 			return;
 		}
 
 		// Crear el nombre del archivo
-		String fileName = "";
-		if (LANG.equals("JAVA")) {
-			fileName = execID + ".java";
-		}
-
-		if (LANG.equals("C")) {
-			fileName = execID + ".c";
-		}
-
-		if (LANG.equals("C++")) {
-			fileName = execID + ".cpp";
-		}
-
-		if (LANG.equals("Python")) {
-			fileName = execID + ".py";
-		}
-
-		if (LANG.equals("Php")) {
-			fileName = execID + ".php";
-		}
-
-		if (LANG.equals("C#")) {
-			fileName = execID + ".cs";
-		}
-
-		if (LANG.equals("Perl")) {
-			fileName = execID + ".pl";
-		}
-
+		String fileName = execID + languages.get(LANG);
 		String rawFileName = 	"";
 
 		// es un concurso ?
@@ -215,16 +199,16 @@ public class Teddy {
 
 		// crer un objeto File donde se guardara el codigo fuente para ser compilado dentro de su sub-carpeta
 		File cfNuevo = new File(directorio, fileName);
-		try{
+		try {
 			cfNuevo.createNewFile();
-		}catch(IOException ioe) {
+		} catch(IOException ioe) {
 			TeddyLog.logger.fatal("Error al escribir en el disco duro archivo " + cfNuevo);
 			TeddyLog.logger.fatal(ioe);
 			return;
 		}
 
 		// copiar linea por linea el contenido en el archivo del work_zone
-		try{
+		try {
 			BufferedReader br = new BufferedReader(new FileReader( cf ));
 			PrintWriter pw = new PrintWriter( cfNuevo );
 
@@ -237,13 +221,13 @@ public class Teddy {
 			pw.flush();
 			pw.close();
 
-		}catch(FileNotFoundException fnfe) {
+		} catch(FileNotFoundException fnfe) {
 			TeddyLog.logger.fatal("No se ha podido leer el archivo de codigo fuente." );
 			TeddyLog.logger.fatal(fnfe);
 			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
 			return;
 
-		}catch(IOException ioe) {
+		} catch(IOException ioe) {
 			TeddyLog.logger.info("Error al transcribir el codigo fuente." + ioe);
 			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
 			return;
@@ -270,7 +254,7 @@ public class Teddy {
 		c.setRunId(execID);
 
 		// verificar si compilo bien o no
-		if (!c.compilar()) {
+		if (!c.compile()) {
 			TeddyLog.logger.info("COMPILACION FALLIDA");
 
 			// no compilo, actualizar la base de datos
@@ -289,12 +273,12 @@ public class Teddy {
 		int tiempoLimite;
 
 		rs = con.query("SELECT titulo, tiempoLimite FROM Problema WHERE probID = " + probID);
-		try{
+		try {
 			rs.next();
 			titulo  = rs.getString("titulo");
 			tiempoLimite = Integer.parseInt ( rs.getString("tiempoLimite") );
 
-		}catch(SQLException sqle) {
+		} catch(SQLException sqle) {
 
 			TeddyLog.logger.fatal("Error al contactar la BD.");
 			return;
@@ -302,16 +286,16 @@ public class Teddy {
 
 		// generar el archivo de entrada para el programa
 		File archivoEntrada = new File(directorio, "data.in");
-		try{
+		try {
 			archivoEntrada.createNewFile();
-		}catch(IOException ioe) {
+		} catch(IOException ioe) {
 			TeddyLog.logger.fatal("Error al escribir el archivo de entrada." + ioe);
 			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
 			return;
 		}
 
 		// llenar el contenido del archivo de entrada
-		String pathArchivoDeEntrada = "/usr/teddy/casos/"+probID+".in";
+		String pathArchivoDeEntrada = "/usr/teddy/casos/" + probID + ".in";
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(pathArchivoDeEntrada));
 			PrintWriter pw = new PrintWriter( archivoEntrada );
@@ -324,11 +308,11 @@ public class Teddy {
 			pw.flush();
 			pw.close();
 
-		}catch(IOException ioe) {
-			TeddyLog.logger.fatal("Error al transcribir el archivo de entrada: " + pathArchivoDeEntrada );
+		} catch(IOException ioe) {
+			TeddyLog.logger.fatal("Error al transcribir el archivo de entrada: " + pathArchivoDeEntrada);
 			TeddyLog.logger.fatal(ioe);
 
-			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
+			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = " + execID + " LIMIT 1 ;");
 			return;
 		}
 
@@ -356,13 +340,13 @@ public class Teddy {
 		ejecucion.start();
 
 		synchronized(ejecucion) {
-			try{
+			try {
 				// esperar hasta el tiempo limite
 				ejecucion.wait( tiempoLimite );
 
-			}catch(InterruptedException ie) {
+			} catch(InterruptedException ie) {
 				// ni idea... :s
-				con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
+				con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = " + execID + " LIMIT 1 ;");
 				TeddyLog.logger.warn("thread interrumpido");
 			}
 
@@ -401,7 +385,7 @@ public class Teddy {
 			return;
 		}
 
-		if (e.status.equals("EXCEPTION") ) {
+		if ( e.status.equals("EXCEPTION") ) {
 			// arrojo una exception
 			TeddyLog.logger.info("RUN-TIME ERROR");
 
@@ -442,7 +426,7 @@ public class Teddy {
 		boolean erroneo = false;
 
 		// leer los contenidos del archivo ke genero el programa he ir comparando linea por linea con la respuesta
-		try{
+		try {
 			BufferedReader salidaDePrograma = new BufferedReader(new FileReader(new File(directorio, "data.out")));
 			BufferedReader salidaCorrecta = new BufferedReader(new FileReader("/usr/teddy/casos/" + probID + ".out"));
 
@@ -451,7 +435,7 @@ public class Teddy {
 			while(((foo = salidaCorrecta.readLine()) != null) ) {
 				if ((bar = salidaDePrograma.readLine()) == null) {
 					erroneo = true;
-					TeddyLog.logger.debug("Se esperaban mas lineas de respuesta!!!") ;
+					TeddyLog.logger.debug("Se esperaban mas líneas de respuesta!!!") ;
 					break;
 				}
 
@@ -467,12 +451,12 @@ public class Teddy {
 			if ((bar = salidaDePrograma.readLine()) != null) {
 				if (! bar.trim().equals("")) {
 					erroneo = true;
-					TeddyLog.logger.debug("Ya acabde de leer la correcta pero tu programa tiene mas lineas") ;
+					TeddyLog.logger.debug("Terminé de leer la correcta pero tu programa tiene más líneas") ;
 					TeddyLog.logger.debug("->"+bar) ;
 				}
 			}
 
-		}catch(IOException ioe) {
+		} catch(IOException ioe) {
 
 			TeddyLog.logger.info("NO SALIDA");
 			TeddyLog.logger.warn(ioe);
@@ -502,7 +486,7 @@ public class Teddy {
 			int aciertos = 0;
 			int intentos = 0;
 
-			try{
+			try {
 				while(rs.next()) {
 					intentos++;
 					// TeddyLog.logger.info("("+ intentos +")->"+rs.getString("status"));
@@ -511,7 +495,7 @@ public class Teddy {
 						aciertos++;
 				}
 
-			}catch(SQLException sqle) {
+			} catch(SQLException sqle) {
 				TeddyLog.logger.fatal("Error al contactar la BD.");
 				return;
 			}
@@ -522,16 +506,16 @@ public class Teddy {
 			if ( aciertos == 1 ) {
 				con.update("UPDATE Usuario SET solved = solved + 1  WHERE userID = '"+ userID +"' LIMIT 1 ;");
 
-			}else{
+			} else {
 				TeddyLog.logger.info("Ya tenias resuelto este problema. Ya haz enviado "+ intentos +" soluciones para este problema. Y "+aciertos+" han sido correctas.");
 			}
 
 			// agregar un nuevo acierto al problema
 			con.update("UPDATE Problema SET aceptados = (aceptados + 1) WHERE probID = "+ probID +" LIMIT 1 ");
-		}else{
+		} else {
 			// salida erronea
 			TeddyLog.logger.info(" - WRONG - ");
-			TeddyLog.logger.info("El programa termino en "+tiempoTotal+"ms. Pero no produjo la respuesta correcta.");
+			TeddyLog.logger.info("El programa terminó en "+tiempoTotal+"ms. Pero no produjo la respuesta correcta.");
 
 			// guardar el resultado
 			con.update("UPDATE Ejecucion SET status = 'INCORRECTO', tiempo = "+ tiempoTotal +"  WHERE execID = "+ execID +" LIMIT 1 ;");
@@ -551,12 +535,11 @@ public class Teddy {
 
 	private static void terminarConexion() {
 		// terminar la conexion con la base de datos
-		try{
+		try {
 			con.cerrar();
-		}catch(Exception e) {
-			TeddyLog.logger.fatal("Error al cerrar la conexion con la base de datos.");
+		} catch(Exception e) {
+			TeddyLog.logger.fatal("Error al cerrar la conexión con la base de datos.");
 			return;
 		}
 	}
 }
-
