@@ -25,21 +25,31 @@ public class Compilador {
 		if (Arrays.asList(INTERPRETED).contains(LANG)) { return true; }
 
 		// estos lenguajes sí se compilan
-		if(LANG.equals("Java")) { command = "javac " + fileName; }
-
-		if(LANG.equals("C")) {
+		if (LANG.equals("C")) {
 			command = "gcc " +
 			  fileName + " -o /var/tmp/teddy/work_zone/" +
 			  runId  + "/a.out -O2 -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE";
 		}
 
-		if(LANG.equals("C++")){
+		if (LANG.equals("C++")){
 			command = "g++ " +
 				fileName + " -o /var/tmp/teddy/work_zone/" +
 				runId  + "/a.out -O2 -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE";
 		}
 
-		TeddyLog.logger.info("Comando para compile > " + command);
+		if (LANG.equals("C#")) { command = "gmcs " + fileName; }
+
+		if (LANG.equals("Crystal")) { command = "crystal build " + fileName + " --release"; }
+
+		if (LANG.equals("Erlang")) { command = "erlc " + fileName; }
+
+		if (LANG.equals("Java")) { command = "javac " + fileName; }
+
+		if (LANG.equals("Rust")) { command = "rustc -O " + fileName; }
+
+		if (LANG.equals("Swift")) { command = "swiftc -O " + fileName; }
+
+		TeddyLog.logger.info("Comando para compilar > " + command);
 		int exitVal = -1;
 
 		// intentar la compilacion
@@ -87,8 +97,7 @@ public class Compilador {
 			return false;
 		}
 
-		// si pudo compile el juez
-		// depende lo que regrese el compilador es si si compilo o no compilo
+		// ¿si pudo compilar el juez? depende lo que regrese el compilador es si compiló o no compiló
 		return (exitVal == 0);
 	}
 
