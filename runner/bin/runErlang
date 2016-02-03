@@ -1,2 +1,2 @@
 cd /var/tmp/teddy/work_zone/$1
-erl -noshell -s $2 start -s init stop
+erl -noshell -s $2 main $1 -s init stop
