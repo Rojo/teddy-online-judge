@@ -38,7 +38,7 @@ public class Compilador {
 		}
 
 		if (LANG.equals("C#")) { command = "gmcs " + fileName; }
-
+		
 		if (LANG.equals("Crystal")) { command = "crystal build " + fileName + " --release"; }
 
 		if (LANG.equals("Erlang")) { command = "erlc " + fileName; }
