@@ -20,43 +20,43 @@ public class Conexion {
 	}
 
 	private void abrir() throws Exception {
-		if (conexion == null){
-			// /usr/lib/jvm/java-6-openjdk/jre/lib/ext
+		if (conexion == null) {
 			Class.forName("org.gjt.mm.mysql.Driver"); // cargamos el driver
 			conexion = DriverManager.getConnection(url, login, password);
 		} else {
-			TeddyLog.logger.error("Ya existe una conexion activa a " + bd);
+			TeddyLog.logger.error("Ya existe una conexión activa a " + bd);
 		}
 	}
 
 	public void cerrar() throws Exception{
-		if(conexion != null){
+		if (conexion != null) {
 			conexion.close();
 			conexion = null;
 		} else {
-			TeddyLog.logger.error("No existe conexion que cerrar");
+			TeddyLog.logger.error("No existe conexión que cerrar");
 		}
 	}
 
 	public ResultSet query(String consulta) {
-		try{
+		try {
 			Statement estado = conexion.createStatement();
-			ResultSet rs = estado.executeQuery(consulta); 
+			ResultSet rs = estado.executeQuery(consulta);
 			return rs;
-		}catch(Exception e){
+		} catch(Exception e) {
 			TeddyLog.logger.error(e);
 		}
+
 		return null;
 	}
 
 	public int update(String consulta) {
-		try{
+		try {
 			Statement estado = conexion.createStatement();
 			int rs = estado.executeUpdate(consulta);
 			return rs;
-		}catch(com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException micve){
+		} catch(com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException micve) {
 			TeddyLog.logger.error(micve);
-		}catch(Exception e){
+		} catch(Exception e) {
 			TeddyLog.logger.error(e);
 		}
 

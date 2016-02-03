@@ -15,11 +15,17 @@ public class Teddy {
 		languages.put("C", ".c");
 		languages.put("C++", ".cpp");
 		languages.put("C#", ".cs");
+		languages.put("Crystal", ".cr");
+		languages.put("Elixir", ".ex");
+		languages.put("Erlang", ".erl");
 		languages.put("Java", ".java");
+		languages.put("Javascript", ".js");
 		languages.put("Perl", ".pl");
 		languages.put("PHP", ".php");
 		languages.put("Python", ".py");
 		languages.put("Ruby", ".rb");
+		languages.put("Rust", ".rs");
+		languages.put("Swift", ".swift");
 	}
 
 	public static void main( String [] args ) throws IOException {

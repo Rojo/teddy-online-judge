@@ -36,40 +36,75 @@ public class Ejecutar implements Runnable{
 
 			double uid = Math.random();
 
-			// Comandos por lenguaje
+			// comandos por lenguaje
       if (LANG.equals("C")) {
         command = "./runC " + execID  + " " + uid;
         killcommand = "a.out USER_CODE " + uid;
       }
 
       if (LANG.equals("C++")) {
-        command = "./runC " + execID  + " " + Math.random();
+        command = "./runC " + execID  + " " + uid;
         killcommand = "a.out USER_CODE " + uid;
+      }
+
+			if (LANG.equals("C#")) {
+				command = "./runC# " + execID  + " " + uid;
+				killcommand = "mono " + execID + ".exe USER_CODE " + uid;
+			}
+
+      if (LANG.equals("Crystal")) {
+        command = "./runCrystal " + execID  + " " + uid;
+        killcommand = execID + " USER_CODE " + uid;
+      }
+
+      if (LANG.equals("Elixir")) {
+        command = "./runElixir " + execID  + " " + uid;
+        killcommand = "elixir " + execID +".ex USER_CODE " + uid;
+      }
+
+      if (LANG.equals("Erlang")) {
+        command = "./runErlang " + execID  + " " + uid;
+        killcommand = "erl -noshell -s " + execID + " main " + uid + " -s init stop";
       }
 
 			if (LANG.equals("Java")) {
 				command = "./runJava " + execID + " " + uid ;
-				killcommand = "java Main USER_CODE " + uid;
+				killcommand = "java " + execID + " USER_CODE " + uid;
 			}
+
+      if (LANG.equals("Javascript")) {
+        command = "./runJS " + execID  + " " + uid;
+        killcommand = "node " + execID +".js USER_CODE " + uid;
+      }
 
 			if (LANG.equals("Perl")) {
 				command = "./runPerl " + execID + " " + uid ;
-				killcommand = "perl Main.pl USER_CODE " + uid;
+				killcommand = "perl " + execID + ".pl USER_CODE " + uid;
 			}
 
 			if (LANG.equals("PHP")) {
 				command = "./runPHP " + execID + " " + uid ;
-				killcommand = "php "+ execID +".php USER_CODE " + uid;
+				killcommand = "php "+ execID + ".php USER_CODE " + uid;
 			}
 
       if (LANG.equals("Python")) {
         command = "./runPython "+ execID  + " " + uid;
-        killcommand = "python Main.py USER_CODE " + uid;
+        killcommand = "python " + execID + ".py USER_CODE " + uid;
       }
 
       if (LANG.equals("Ruby")) {
         command = "./runRuby " + execID  + " " + uid;
         killcommand = "ruby " + execID +".rb USER_CODE " + uid;
+      }
+
+      if (LANG.equals("Rust")) {
+        command = "./runRust " + execID  + " " + uid;
+        killcommand = execID + " USER_CODE " + uid;
+      }
+
+      if (LANG.equals("Swift")) {
+        command = "./runSwift " + execID  + " " + uid;
+        killcommand = execID + " USER_CODE " + uid;
       }
 
 			int exitVal = 0;
