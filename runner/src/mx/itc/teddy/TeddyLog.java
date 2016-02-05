@@ -21,11 +21,11 @@ public class TeddyLog {
 		try {
 			appender = new FileAppender(layout,"/var/log/teddy/teddy.log", true);
 			logger.addAppender(appender);
-
-		}catch(IOException ioe){
+		} catch(IOException ioe) {
 			System.out.println("Imposible eescribir al archivo de log");
 			logger = null;
 		}
-	};
+	}
+
 }
 

@@ -1,5 +1,7 @@
-<html doctype>
+<!DOCTYPE html>
+<html lang="es">
 	<head>
+		<meta charset="UTF-8" />
 		<link rel="stylesheet" type="text/css" href="css/teddy_style.css" />
 		<link rel="stylesheet" type="text/css" href="uploadify/uploadify.css" />
 		<link type="text/css" rel="stylesheet" href="css/SyntaxHighlighter.css"></link>
@@ -21,13 +23,13 @@
 		<title>
 		<?php
 			if (defined("PAGE_TITLE")) {
-				echo PAGE_TITLE . " - "; 
+				echo PAGE_TITLE . " - ";
 			}
 		?>Teddy Online Judge</title>
 
 		<meta name="description" content="">
 	</head>
-	
+
 <body>
 <div class="wrapper">
 
@@ -49,12 +51,12 @@
 					</td>
 					<td><h1>teddy online judge</h1></td>
 					<td rowspan=2 valign=top>
-						<div 
+						<div
 							style="margin-left: 5px; margin-top: 7px;"
-							class="fb-like" 
-							data-href="https://www.facebook.com/pages/Teddy-Online-Judge/124087854360498" 
-							data-send="true" 
-							data-layout="button_count" 
+							class="fb-like"
+							data-href="https://www.facebook.com/pages/Teddy-Online-Judge/124087854360498"
+							data-send="true"
+							data-layout="button_count"
 							data-width="150"
 							data-show-faces="false">
 						</div>

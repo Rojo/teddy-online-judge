@@ -1,2 +1,2 @@
 cd /var/tmp/teddy/work_zone/$1
-elixir $1.ex USER_CODE $2
+erlc $2.erl

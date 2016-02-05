@@ -1,81 +1,86 @@
 package mx.itc.teddy;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class Compilador {
 
 	private String fileName;
 	private String LANG;
 	private String runId;
-	final private boolean imprimirSalida = true;
+	private final boolean printOutput = true;
+	private static final String[] INTERPRETED = new String[] {
+    "Elixir",
+    "Javascript",
+		"Perl",
+		"PHP",
+		"Python",
+    "Ruby"
+	};
 
-	public boolean compilar() {
-		String comando = "";
+	public boolean compile() {
+		String command = "";
 
-		//no hay necesidad de compilar a python
-		if(LANG.equals("Python")) 
-			return true;
+		// no hay necesidad de compilar estos lenguajes
+		if (Arrays.asList(INTERPRETED).contains(LANG)) { return true; }
 
-		//no hay necesidad de compilar perl
-		if(LANG.equals("Perl")) 
-			return true;
-
-		//no hay necesidad de compilar php
-		if(LANG.equals("Php")) 
-			return true;
-
-		//genera el comando ke se ejecutara
-		if(LANG.equals("JAVA"))
-			comando = "javac " + fileName;
-
-		if(LANG.equals("C")){
-			//String [] test = fileName.split("/");
-			//comando = "./compileC " + test[2] + " " + test[3]; //comando = "gcc " + fileName;
-			comando = "gcc " + fileName + " -o /var/tmp/teddy/work_zone/" + runId  + "/a.out -O2 -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE";
+		// estos lenguajes sí se compilan
+		if (LANG.equals("C")) {
+			command = "gcc " +
+			  fileName + " -o /var/tmp/teddy/work_zone/" +
+			  runId  + "/a.out -O2 -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE";
 		}
 
-		if(LANG.equals("C++")){
-			// String [] test = fileName.split("/");
-			// comando = "./compileC++ " + test[2] + " " + test[3]; 
-			comando = "g++ " + fileName + " -o /var/tmp/teddy/work_zone/" + runId  + "/a.out -O2 -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE";
-			//			g++ $2 -O2 -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE
-
-
+		if (LANG.equals("C++")){
+			command = "g++ " +
+				fileName + " -o /var/tmp/teddy/work_zone/" +
+				runId  + "/a.out -O2 -ansi -fno-asm -Wall -lm -static -DONLINE_JUDGE";
 		}
 
+		if (LANG.equals("C#")) { command = "gmcs " + fileName; }
+		
+		if (LANG.equals("Crystal")) { command = "crystal build " + fileName + " --release"; }
 
-		TeddyLog.logger.info("Comando para compilar > " + comando);
+		if (LANG.equals("Erlang")) { command = "erlc " + fileName; }
+
+		if (LANG.equals("Java")) { command = "javac " + fileName; }
+
+		if (LANG.equals("Rust")) { command = "rustc -O " + fileName; }
+
+		if (LANG.equals("Swift")) { command = "swiftc -O " + fileName; }
+
+		TeddyLog.logger.info("Comando para compilar > " + command);
 		int exitVal = -1;
 
-		//intentar compilar
-		try{
-			Process proc = Runtime.getRuntime().exec(comando);
+		// intentar la compilacion
+		try {
+			Process proc = Runtime.getRuntime().exec(command);
 
-			//esperar hasta que termine el proceso
+			// esperar hasta que termine el proceso
 			exitVal = proc.waitFor();
 
-			//si es que vamos a imprimir salida
-			if (imprimirSalida) {
-				//capturar la salida
+			// si es que vamos a imprimir salida
+			if (printOutput) {
+				// capturar la salida
 				InputStreamReader isr = new InputStreamReader(proc.getInputStream());
 				BufferedReader br = new BufferedReader(isr);
 
-				String linea = "";
-				while ((linea = br.readLine()) != null) {
-					//imprimir en salida estandar
-					TeddyLog.logger.warn("StdOut>>> " + linea);
+				String line = "";
+				while ((line = br.readLine()) != null) {
+					// imprimir en salida estandar
+					TeddyLog.logger.warn("StdOut>>> " + line);
 				}
 
-				//leer salida de error
+				// leer salida de error
 				InputStreamReader isr2 = new InputStreamReader( proc.getErrorStream() );
 				BufferedReader br2 = new BufferedReader( isr2 );
 
-				String linea2 = null;
+				String line2 = null;
 				String endString = "";
 
-				while ((linea2 = br2.readLine()) != null) {
-					TeddyLog.logger.warn("StdErr>>> " + linea2);
-					endString += linea2 + "\n";
+				while ((line2 = br2.readLine()) != null) {
+					TeddyLog.logger.warn("StdErr>>> " + line2);
+					endString += line2 + "\n";
 				}
 
 				if(endString.length() > 0){
@@ -86,33 +91,21 @@ public class Compilador {
 				}
 			}
 
-		}catch(Exception e){
-			//error interno del juez
+		} catch(Exception e) {
+			// error interno del juez
 			TeddyLog.logger.fatal("ERROR EN EL JUEZ: " + e);
 			return false;
 		}
 
-
-		//si pudo compilar el juez
-		//depende lo que regrese el compilador es si si compilo o no compilo
+		// ¿si pudo compilar el juez? depende lo que regrese el compilador es si compiló o no compiló
 		return (exitVal == 0);
 	}
 
-	//constructor
-	Compilador( ){
-		TeddyLog.logger.info("Creando compilador...");
-	}
+	// constructor
+	Compilador() { TeddyLog.logger.info("Creando compilador..."); }
+	void setLang(String LANG) { this.LANG = LANG; }
+	void setFile(String fileName) { this.fileName = fileName; }
+	void setRunId(String runId) { this.runId = runId; }
 
-	void setLang(String LANG){
-		this.LANG = LANG;
-	}
-
-	void setFile(String fileName){
-		this.fileName = fileName;
-	}
-
-	void setRunId(String runId){
-		this.runId = runId;
-	}
 }
 
