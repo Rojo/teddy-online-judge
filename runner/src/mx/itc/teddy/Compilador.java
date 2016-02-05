@@ -10,12 +10,13 @@ public class Compilador {
 	private String runId;
 	private final boolean printOutput = true;
 	private static final String[] INTERPRETED = new String[] {
-    "Elixir",
-    "Javascript",
+        "Elixir",
+        "Javascript",
 		"Perl",
 		"PHP",
 		"Python",
-    "Ruby"
+        "Ruby",
+        "Go"
 	};
 
 	public boolean compile() {

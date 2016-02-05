@@ -81,6 +81,7 @@ class envios
 					<option value="py">Python</option>
 					<option value="php">PHP</option>
 					<option value="pl">Perl</option>
+					<option value="go">Go</option>
 				</select>
 			</div>
 		<?php

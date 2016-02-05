@@ -107,6 +107,11 @@ public class Ejecutar implements Runnable{
         killcommand = execID + " USER_CODE " + uid;
       }
 
+      if (LANG.equals("Go")) {
+        command = "./runGo "+ execID  + " " + uid;
+        killcommand = "go run " + execID + ".py USER_CODE " + uid;
+      }
+
 			int exitVal = 0;
 
 			PID = command;

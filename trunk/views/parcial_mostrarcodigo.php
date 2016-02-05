@@ -17,6 +17,7 @@
 		case "Python": 	$file .= ".py"; 	$sintaxcolor = "py"; 		break;
 		case "Perl": 	$file .= ".pl"; 	$sintaxcolor = "py"; 		break;
 		case "Php": 	$file .= ".php"; 	$sintaxcolor = "php"; 		break;
+		case "Go": 	    $file .= ".go"; 	$sintaxcolor = "go"; 		break;
 		default : 		$file .= ".java"; 	$sintaxcolor = "java";
 	}
 
