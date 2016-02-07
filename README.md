@@ -1,29 +1,43 @@
-Teddy Online Judge
-==================
+# Teddy Online Judge
+
 Teddy Online Judge es el resultado de una iniciativa denominada Club de Programación del Tecnológico de Celaya. Este club tuvo como finalidad alentar a los estudiantes del Tecnológico a participar en concursos de programación llevados a cabo en la región. Y el de consolidar un nivel de programación mayor al que se tenía.
 
-Instalacion
-==================
+## Instalación
+
 ```
-  $git clone https://github.com/alanboy/teddy-online-judge.git
-  $cd teddy-online-judge\
-  $git submoudle init
-  $git submoudle update
+  $ git clone https://github.com/alanboy/teddy-online-judge.git
+  $ cd teddy-online-judge\
+  $ git submoudle init
+  $ git submoudle update
 
-  $cd deploy
-  #docker-compose build
-  #docker-compose up
+  $ cd deploy
+  $ docker-compose build
 ```
 
-Despues de eso Teddy estara corriendo en http://127.0.0.1:8080/
-Logs(desde el host):
- `/var/log/teddy/teddy.log`
- `/var/log/ngninx/error.log`
+### Iniciar el entorno
+```
+  $ docker-compose up
+```
 
+Después de eso Teddy estará corriendo en http://127.0.0.1:8080/
 
+### Mostrar el log del servidor
+```
+  $ tail -f /var/log/nginx/error.log
+```
 
-API
-==================
+### Mostrar el log de Teddy
+```
+  $ /var/log/teddy/teddy.log
+```
+
+### Conectarse a la terminal
+```
+  $ docker exec -i -t deploy_teddy_runner bash
+```
+
+## API
+
 ```
  c_backup::BackupDatabase()
 

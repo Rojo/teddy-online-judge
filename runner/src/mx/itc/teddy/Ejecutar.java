@@ -67,6 +67,11 @@ public class Ejecutar implements Runnable{
         killcommand = "erl -noshell -s " + execID + " main " + uid + " -s init stop";
       }
 
+      if (LANG.equals("Go")) {
+        command = "./runGo "+ execID  + " " + uid;
+        killcommand = "go run " + execID + ".go USER_CODE " + uid;
+      }
+
 			if (LANG.equals("Java")) {
 				command = "./runJava " + execID + " " + uid ;
 				killcommand = "java " + execID + " USER_CODE " + uid;

@@ -11,6 +11,7 @@ public class Compilador {
 	private final boolean printOutput = true;
 	private static final String[] INTERPRETED = new String[] {
     "Elixir",
+    "Go",
     "Javascript",
 		"Perl",
 		"PHP",
@@ -38,7 +39,7 @@ public class Compilador {
 		}
 
 		if (LANG.equals("C#")) { command = "gmcs " + fileName; }
-		
+
 		if (LANG.equals("Crystal")) { command = "crystal build " + fileName + " --release"; }
 
 		if (LANG.equals("Erlang")) { command = "erlc " + fileName; }

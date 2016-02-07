@@ -31,6 +31,7 @@ Por la extension del codigo fuente, cuando subes un archivo que termina en .java
 .py - Python<br>
 .pl - Perl
 .php - PHP
+.go - Go
 </p>
 
 <p>

@@ -27,7 +27,7 @@
 		</li>
 		<li  class="subtab rightmost-tab">
 			<a href="#nuevo" onclick="ShowTab( 'tab-concursos-nuevo', this);">
-			<span>Crar un concurso</span>
+			<span>Crear un concurso</span>
 			</a>
 		</li>
 	</ul>
@@ -36,7 +36,21 @@
 
 <div id="tab-concursos-nuevo" class="post_blanco tab">
 	<h2>Crear un concurso</h2>
-	<?php include("parcial_nuevoconcurso.php"); ?>
+<?php
+	if(isset($_REQUEST["cname"])){
+		$result = c_concurso::nuevo();
+		if($result){
+?>
+		<div><p>¡Concurso creado exitosamente!</p></div>
+<?php			
+		}else{
+?>
+		<div><p><?php echo $msg; ?></p></div>
+<?php			
+		}
+	}
+?>
+	<?php include("parcial_nuevoconcurso.php");?>
 </div>
 
 <div id="tab-concursos-activos" class="post_blanco tab">

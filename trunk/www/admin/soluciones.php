@@ -22,6 +22,7 @@
 			case "C#": $file .= ".cs"; $sintaxcolor = "csharp"; break;
 			case "Python": $file .= ".py"; $sintaxcolor = "py"; break;
 			case "Perl": $file .= ".pl"; $sintaxcolor = "py"; break;
+			case "Go": $file .= ".go"; $sintaxcolor = "go"; break;
 			default : $file .= ".java"; $sintaxcolor = "java";
 		}
 

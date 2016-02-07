@@ -29,7 +29,8 @@ RUN apt-get -y install supervisor \
   ruby \
   nodejs \
   mono-gmcs \
-  elixir
+  elixir \
+  golang
 
 # Compilers and interpreters that require extra steps
 ## Crystal needs curl, so it gets its own APT line
