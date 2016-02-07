@@ -7,14 +7,15 @@ MAINTAINER Alan Gonzalez<alanboy@alanboy.net>
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Get some security updates
+RUN dpkg --configure -a --force-all
+RUN apt-get clean
 RUN apt-get update
 RUN apt-get -y upgrade
 
 # Tools and dependencies
 RUN apt-get -y install supervisor \
+  software-properties-common \
   git \
-  mysql-server \
-  mysql-client \
   curl \
   wget \
   vim \
@@ -22,8 +23,6 @@ RUN apt-get -y install supervisor \
   libicu-dev \
   libpython2.7 \
   openjdk-8-jdk \
-  php5 \
-  php5-cli \
   gcc \
   g++ \
   ruby \
@@ -33,6 +32,10 @@ RUN apt-get -y install supervisor \
   golang
 
 # Compilers and interpreters that require extra steps
+## Updated PHP
+RUN add-apt-repository -y ppa:ondrej/php
+RUN apt-get update && apt-get -y --force-yes install php
+
 ## Crystal needs curl, so it gets its own APT line
 RUN curl http://dist.crystal-lang.org/apt/setup.sh | bash
 RUN apt-get -y install crystal

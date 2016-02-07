@@ -28,7 +28,7 @@ Después de eso Teddy estará corriendo en http://127.0.0.1:8080/
 
 ### Mostrar el log de Teddy
 ```
-  $ /var/log/teddy/teddy.log
+  $ tail -f /var/log/teddy/teddy.log
 ```
 
 ### Conectarse a la terminal
