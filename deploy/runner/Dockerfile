@@ -82,3 +82,6 @@ RUN echo "\$TEDDY_DB_PASSWORD= \"\";" >> /opt/teddy/runner/config.php
 ADD conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 CMD ["/usr/bin/supervisord"]
+
+# Set the locale
+ENV LC_ALL C.UTF-8
