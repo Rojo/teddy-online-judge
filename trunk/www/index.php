@@ -1,5 +1,4 @@
 <?php
-
 	require_once("../serverside/bootstrap.php");
 	require_once("head.php");
 
@@ -31,7 +30,6 @@
 				break;
 		}
 	}
-
 ?>
 
 <div class="post_blanco">
@@ -93,13 +91,24 @@ Como funciona?
 		# Esto aún es feo: debería tener su propio modelo y funciones helper,
 	  # pero al menos se podrán agregar consultas de nuevos lenguajes de
 	  # forma más sencilla.
+	  # BTW, tal vez sería mejor listar los 5 lenguajes más usados de la
+	  # plataforma.
 		$lenguajes = array(
-			"C"      => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
-			"Cpp"    => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
-			"Java"   => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
-			"Perl"   => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
-			"PHP"    => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
-			"Python" => array( "ejecuciones" => 0, "porcentaje" => 0.0 )
+			"C"           => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"C++"         => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"C#"          => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Crystal"     => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Elixir"      => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Erlang"      => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Go"          => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Java"        => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Javascript"  => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Perl"        => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"PHP"         => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Python"      => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Ruby"        => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Rust"        => array( "ejecuciones" => 0, "porcentaje" => 0.0 ),
+			"Swift"       => array( "ejecuciones" => 0, "porcentaje" => 0.0 )
 		);
 
 		# Consulta y calculo de datos sobre los lenguajes
@@ -122,7 +131,7 @@ Como funciona?
 		$img_etiquetas = "";
 		foreach ($lenguajes as $lenguaje => $datos) {
 			$img_porcentajes .= $datos["porcentaje"].",";
-			$img_etiquetas .= $lenguaje."|";
+			$img_etiquetas .= urlencode($lenguaje)."|";
 		}
 
 	?>
