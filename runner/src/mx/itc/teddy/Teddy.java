@@ -18,6 +18,7 @@ public class Teddy {
 		languages.put("Crystal", ".cr");
 		languages.put("Elixir", ".ex");
 		languages.put("Erlang", ".erl");
+		languages.put("Go", ".go");
 		languages.put("Java", ".java");
 		languages.put("Javascript", ".js");
 		languages.put("Perl", ".pl");
