@@ -11,7 +11,7 @@
 	?>
 <form class="form-big" method="post">
 
-	<p>Aqui van instrucciones y recomencadaciones para crear un problema.</p>
+	<p>Aquí van instrucciones y recomendaciones para crear un problema.</p>
 
 	<label for="titulo">
 		Titulo:
@@ -74,7 +74,7 @@
 			$(form).parent(),
 			Teddy.c_problema.nuevo,
 			function(result) {
-				Teddy.msg("Revisa tu correo electronico");
+				Teddy.msg("Revisa tu correo electrónico");
 			});
 		return false;
 	}

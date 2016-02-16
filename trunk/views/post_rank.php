@@ -1,15 +1,15 @@
 <div class="post_blanco">
 	<table>
 	<thead> <tr >
-		<th width='5%'>Rank</th> 
-		<th width='5%'>Usuario</th> 
-		<th width='15%'>Ubicacion</th> 
-		<th width='15%'><a href="rank.php?order=escuela">Escuela</a></th> 
-		<th width='5%'><a href="rank.php?order=resueltos">Resueltos</a></th> 
-		<th width='5%'><a href="rank.php?order=envios">Envios</a></th> 
-		<th width='5%'>Radio</th> 
-		</tr> 
-	</thead> 
+		<th width='5%'>Rank</th>
+		<th width='5%'>Usuario</th>
+		<th width='15%'>Ubicación</th>
+		<th width='15%'><a href="rank.php?order=escuela">Escuela</a></th>
+		<th width='5%'><a href="rank.php?order=resueltos">Resueltos</a></th>
+		<th width='5%'><a href="rank.php?order=envios">Envíos</a></th>
+		<th width='5%'>Radio</th>
+		</tr>
+	</thead>
 	<tbody>
 	<?php
 		$res = c_usuario::rank();
