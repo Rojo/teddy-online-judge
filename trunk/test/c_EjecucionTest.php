@@ -4,7 +4,7 @@ class c_EjecucionTest extends PHPUnit_Framework_TestCase
 {
 	public function testNuevaEjecucion()
 	{
-		// Crear un usuario e iniciar sesion
+		// Crear un usuario e iniciar sesión
 		$nick = "p" . time();
 		$uarg = array(
 			"nombre" => "problem tester",
@@ -33,7 +33,7 @@ class c_EjecucionTest extends PHPUnit_Framework_TestCase
 		$result = c_problema::nuevo($arg);
 
 
-		// Crear un nuevo envio
+		// Crear un nuevo envió
 		$arg = array(
 			"id_problema" => $result["probID"],
 			"lang" => "java",
@@ -50,11 +50,11 @@ class c_EjecucionTest extends PHPUnit_Framework_TestCase
 
 		$result = c_ejecucion::nuevo($arg);
 
-		//Revisar el estado del run hasta que no sea waiting...
+		// Revisar el estado del run hasta que no sea waiting...
 		$detalles = c_ejecucion::details($result);
 
 		$retry = 0;
-		while( ($retry < 5) &&  
+		while( ($retry < 5) &&
 				(($detalles["run"]["status"] == "WAITING" )
 				|| (	$detalles["run"]["status"] == "JUDGING" )))
 		{

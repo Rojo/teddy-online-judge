@@ -1,12 +1,12 @@
 <phpunit
-    backupGlobals="false"
+  backupGlobals="false"
 	bootstrap="../serverside/bootstrap.php"
-    backupStaticAttributes="true"
-    colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    stopOnFailure="true"
-    syntaxCheck="false"
+  backupStaticAttributes="true"
+  colors="true"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  stopOnFailure="true"
+  syntaxCheck="false"
 >
 </phpunit>
