@@ -68,18 +68,6 @@
 	</table>
 </div>
 
-<!--
-<div class="post_blanco">
-Como funciona?
-1) Lee el problema:
-2) Escribe codigo que lo resuelva:
-3) Sube el codigo:
-	<?php
-			include ("parcial_nuevoenvio.php")
-	?>
-</div>
--->
-
 <div class="post_blanco">
 
 	<div align="center">
