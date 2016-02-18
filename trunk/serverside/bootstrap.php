@@ -18,14 +18,14 @@ require_once("/opt/teddy/container/config.php");
 if (isset($TEDDY_CODIGOS_PATH))
 {
 	define("PATH_TO_CODIGOS", $TEDDY_CODIGOS_PATH);
-}else{
+} else {
 	define("PATH_TO_CODIGOS", "/usr/teddy/codigos");
 }
 
 if (isset($TEDDY_CASOS_PATH))
 {
 	define("PATH_TO_CASOS", $TEDDY_CASOS_PATH);
-}else{
+} else {
 	define("PATH_TO_CASOS", "/usr/teddy/casos");
 }
 

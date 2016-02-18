@@ -46,7 +46,7 @@ RUN echo "<?php \$TEDDY_DB_USER = \"root\";" >> /opt/teddy/container/config.php 
     && echo "\$TEDDY_DB_PASS = \"\";" >> /opt/teddy/container/config.php \
     && echo "\$TEDDY_DB_NAME = \"teddy\";" >> /opt/teddy/container/config.php \
     && echo "\$TEDDY_LOG = \"/var/log/teddy/teddy.log\";" >> /opt/teddy/container/config.php \
-    && echo "\$TEDDY_CODIGOS_PATH = \"/usr/teddy/codigos\";" >> /opt/teddy/container/config.php 
+    && echo "\$TEDDY_CODIGOS_PATH = \"/usr/teddy/codigos\";" >> /opt/teddy/container/config.php
 
 # Setup database
 ADD bd.sql /opt/teddy/container
@@ -66,8 +66,3 @@ EXPOSE 80
 EXPOSE 443
 
 CMD ["/usr/bin/supervisord"]
-
-# Need to run this at the end (runtime)
-#RUN cd /opt/teddy/trunk; git submodule init
-#RUN cd /opt/teddy/trunk; git submodule update
-
