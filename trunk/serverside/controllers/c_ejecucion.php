@@ -11,7 +11,7 @@ class c_ejecucion extends c_controller
 		$result = $db->Execute($sql, $data)->GetArray();
 
 		return array(
-				"result" => "ok", 
+				"result" => "ok",
 				"run" => $result[0]
 			);
 	}
@@ -24,7 +24,7 @@ class c_ejecucion extends c_controller
 		$asdf =  mysql_real_escape_string($_REQUEST["execID"]);
 		$consulta = "select * from Ejecucion where BINARY ( execID = '{$asdf}' )";
 		$resultado = mysql_query($consulta) or die('Algo anda mal: ' . mysql_error());
-	
+
 		if(mysql_num_rows($resultado) != 1){
 			echo "<b>Este codigo no existe</b>";
 			return;
@@ -40,42 +40,42 @@ class c_ejecucion extends c_controller
 		if( ($row['userID'] == $_SESSION['userID']) || ($_SESSION['userMode'] == "OWNER") ){
 			//este codigo es tuyo o eres OWNER
 			mostrarCodigo($row['LANG'], $_REQUEST["execID"] , $row);
-	
+
 		}else{
-			
-			
+
+
 			//no puedes ver codigos que estan mal
 			if($row['status'] != "OK"){
 				?><div style="font-size: 16px;"> <img src="img/12.png">No puedes ver codigos que no estan aceptados aunque cumplas con los requisitos.</div><?php
 				return;
 			}
-			
+
 			//no puedes ver codigos que son parte de algun concurso
 			if($row['Concurso'] != "-1"){
 				?><div style="font-size: 16px;"> <img src="img/12.png">No puedes ver codigos que pertenecen a un concurso aunque cumplas con los requisitos.</div><?php
 				return;
 			}
-			
+
 			//este codigo no es tuyo, pero vamos a ver si ya lo resolviste con mejor tiempo y que no sea parte de un concurso
 			$consulta = "select * from Ejecucion where probID = '". $row['probID'] ."' AND userID = '". $_SESSION['userID'] ."' AND tiempo < " . $row['tiempo'] . " AND status = 'OK' ;";
 			$resultado2 = mysql_query($consulta) or die('Algo anda mal: ' . mysql_error());
 			$nr = mysql_num_rows($resultado2);
-			
+
 			if($nr >= 1){
 				//ok, te lo voy a mostrar...
 				?><div style="font-size: 16px;"> <img src="img/49.png">Este codigo no es tuyo, pero lo puedes ver porque ya lo resolviste con un mejor tiempo.</div><?php
 				mostrarCodigo($row['LANG'], $_REQUEST["execID"] , $row );
 			}else{
 				//no cumples con los requisitos
-				?> 	
-					<div align='center'> 
-						<h2>Holly molly</h2> 
+				?>
+					<div align='center'>
+						<h2>Holly molly</h2>
 						<br>
 						<div style="font-size: 16px;"> <img src="img/12.png">Estas intentado ver un codigo que no es tuyo. Para poder verlo tienes que resolver este problema y tener un mejor tiempo que el codigo que quieres ver.</div>
-					</div> 
+					</div>
 				<?php
 			}
-			
+
 
 		}
 		*/
@@ -86,20 +86,20 @@ class c_ejecucion extends c_controller
 	{
 		$inputarray = array();
 
-		if(!is_null($request) && array_key_exists("cid", $request)) {
+		if(!is_null($request) && array_key_exists("cid", $request))
+		{
 			$sql = "SELECT `execID`, `userID`, `probID`, `status`, `tiempo`, `fecha`, `LANG`, `Concurso`  FROM `Ejecucion` where `Concurso` = ? order by fecha desc limit 100";
 			$inputarray [0] = $request["cid"];
 
-		}else {
+		} else {
 			$sql = "SELECT `execID`, `userID`, `probID`, `status`, `tiempo`, `fecha`, `LANG`, `Concurso`  FROM `Ejecucion` order by fecha desc limit 100";
 		}
-		
 
 		global $db;
 		$result = $db->Execute($sql, $inputarray);
 
 		return array(
-				"result" => "ok", 
+				"result" => "ok",
 				"runs" => $result->GetArray()
 			);
 	}
@@ -112,17 +112,18 @@ class c_ejecucion extends c_controller
 		$data = array( $request["execID"] );
 		$result = $db->Execute($sql, $data)->GetArray();
 
-		if (sizeof($result) ==0) {
+		if (sizeof($result) ==0)
+		{
 			return array(
-					"result" => "error", 
+					"result" => "error",
 					"reason" => "Este run no existe"
 				);
 		}
 
 		if (!is_dir(PATH_TO_CODIGOS))
 		{
-			Logger::warn("El directorio de codigos no existe: " . PATH_TO_CODIGOS);
-			return array("result" => "error", "reason" => "El directorio de codigos no existe.");
+			Logger::warn("El directorio de códigos no existe: " . PATH_TO_CODIGOS);
+			return array("result" => "error", "reason" => "El directorio de códigos no existe.");
 		}
 
 		$status =  $result[0][0];
@@ -133,7 +134,8 @@ class c_ejecucion extends c_controller
 			);
 
 		if ($status == "COMPILACION"
-			&& file_exists(PATH_TO_CODIGOS.$request['execID'] . ".compiler_out")) {
+			&& file_exists(PATH_TO_CODIGOS.$request['execID'] . ".compiler_out"))
+		{
 			$compiler = file_get_contents(PATH_TO_CODIGOS.$request['execID'] . ".compiler_out");
 			$result["compilador"] = $compiler;
 		}
@@ -145,25 +147,25 @@ class c_ejecucion extends c_controller
 	 * @param id_problema int el id del problema a resolver
 	 * @param id_concurso int el id del concurso si es que este run pertenece a un concurso
 	 * @param lang String el identificador del lenguaje ( c,cpp,java,py,php,pl)
-	 * @param plain_source String 
+	 * @param plain_source String
 	 *
 	 * */
 	public static function nuevo($request)
 	{
 		if (!c_sesion::isLoggedIn())
 		{
-			Logger::warn("Se intento enviar una ejecucion sin sesion");
-			return array("result" => "error", "reason" => "Debes iniciar sesion para poder enviar problemas.");
+			Logger::warn("Se intento enviar una ejecución sin sesión");
+			return array("result" => "error", "reason" => "Debes iniciar sesión para poder enviar problemas.");
 		}
 
 		if (!(isset($request['id_problema']) && isset($request['lang'])))
 		{
-			return array("result" => "error", "reason" => "Faltan parametros (id_problema y lang)");
+			return array("result" => "error", "reason" => "Faltan parámetros (id_problema y lang)");
 		}
 
 		if (empty($_FILES) && !isset($request["plain_source"]))
 		{
-			return array("result" => "error", "reason" => "No se envio el codigo fuente.");
+			return array("result" => "error", "reason" => "No se envió el código fuente.");
 		}
 
 		$usuarioArray      = c_sesion::usuarioActual();
@@ -174,23 +176,21 @@ class c_ejecucion extends c_controller
 		if (isset($request["id_concurso"]))
 		{
 			$id_concurso  = stripslashes($request["id_concurso"]);
-		}
-		else
-		{
+		} else {
 			$id_concurso  = null;
 		}
 
-		// Revisar que pueda escribir el codigo fuente
+		// Revisar que pueda escribir el código fuente
 		if (!is_dir(PATH_TO_CODIGOS))
 		{
 			Logger::error("El directorio : " . PATH_TO_CODIGOS . ", no existe");
-			return array("result" => "error", "reason" => "El directorio de codigos no existe.");
+			return array("result" => "error", "reason" => "El directorio de códigos no existe.");
 		}
 
 		if (!is_writable(PATH_TO_CODIGOS))
 		{
 			Logger::error("El directorio " . PATH_TO_CODIGOS . ", no esta accesible (writtable)");
-			return array("result" => "error", "reason" => "No se puede escribir en el directorio de codigos.");
+			return array("result" => "error", "reason" => "No se puede escribir en el directorio de códigos.");
 		}
 
 		global $db;
@@ -207,18 +207,27 @@ class c_ejecucion extends c_controller
 		$lang_desc = null;
 		switch($lang)
 		{
-			case "java"     : $lang_desc = "JAVA";  break;
-			case "c"        : $lang_desc = "C";     break;
-			case "cpp"      : $lang_desc = "C++";   break;
-			case "py"       : $lang_desc = "Python";break;
-			case "cs"       : $lang_desc = "C#";    break;
-			case "pl"       : $lang_desc = "Perl";  break;
-			case "php"      : $lang_desc = "Php";   break;
+			case "c"     : $lang_desc = "C";          break;
+			case "cpp"   : $lang_desc = "C++";        break;
+			case "cs"    : $lang_desc = "C#";         break;
+			case "cr"		 : $lang_desc = "Crystal";    break;
+			case "ex"		 : $lang_desc = "Elixir";     break;
+			case "erl"	 : $lang_desc = "Erlang";     break;
+			case "go"    : $lang_desc = "Go";         break;
+			case "java"  : $lang_desc = "Java";       break;
+			case "js"    : $lang_desc = "Javascript"; break;
+			case "pl"    : $lang_desc = "Perl";       break;
+			case "php"   : $lang_desc = "PHP";        break;
+			case "py"    : $lang_desc = "Python";     break;
+			case "rb"    : $lang_desc = "Ruby";       break;
+			case "rs"    : $lang_desc = "Rust";       break;
+			case "swift" : $lang_desc = "Swift";      break;
 			default:
 				return array("result" => "error", "reason" =>"\"" . $lang . "\" no es un lenguaje reconocido por Teddy.");
 		}
 
-		if (isset($_SERVER["REMOTE_ADDR"])) {
+		if (isset($_SERVER["REMOTE_ADDR"]))
+		{
 			$ip = $_SERVER["REMOTE_ADDR"];
 		} else {
 			$ip = "0.0.0.0";
@@ -226,23 +235,21 @@ class c_ejecucion extends c_controller
 
 		/**
 		 * @todo
-		 * - vamos a ver si estoy en un concurso, y si estoy en un concurso, que ese problema pertenesca a ese concurso 
+		 * - vamos a ver si estoy en un concurso, y si estoy en un concurso, que ese problema pertenezca a ese concurso
 		 * - vamos a ver que no haya enviado hace menos de 5 min si esta en un concurso
 		 * - insertar un nuevo run y obtener el id insertado, como estado, hay que ponerle uploading
 		 **/
 		if ($id_concurso === null)
 		{
-			$sql = "INSERT INTO Ejecucion (`userID`, `status`, `probID` , `remoteIP`, `LANG`, `fecha`  ) 
-									VALUES (?, 'WAITING', ?, ?, ?, ?);";
+			$sql = "INSERT INTO Ejecucion (`userID`, `status`, `probID` , `remoteIP`, `LANG`, `fecha`  )
+							VALUES (?, 'WAITING', ?, ?, ?, ?);";
 
-			$inputarray = array( $usuario, $id_problema, $ip, $lang_desc, date("Y-m-d H:i:s", mktime(date("H"), date("i") )));
-		}
-		else
-		{
-			$sql = "INSERT INTO Ejecucion (`userID` ,`status`, `probID` , `remoteIP`, `LANG`, `Concurso`, `fecha`  ) 
-									VALUES (?, 'WAITING', ?, ?, ?, ?, ?);";
-			
-			$inputarray = array( $usuario, $id_problema, $ip, $lang_desc, $id_concurso, date("Y-m-d H:i:s", mktime(date("H"), date("i") )));
+			$inputarray = array( $usuario, $id_problema, $ip, $lang_desc, date("Y-m-d H:i:s", mktime(date("H"), date("i"))) );
+		} else {
+			$sql = "INSERT INTO Ejecucion (`userID` ,`status`, `probID` , `remoteIP`, `LANG`, `Concurso`, `fecha`  )
+				      VALUES (?, 'WAITING', ?, ?, ?, ?, ?);";
+
+			$inputarray = array( $usuario, $id_problema, $ip, $lang_desc, $id_concurso, date("Y-m-d H:i:s", mktime(date("H"), date("i"))) );
 		}
 
 		$result = $db->Execute($sql, $inputarray);
@@ -251,24 +258,23 @@ class c_ejecucion extends c_controller
 		$sql = "select execID from Ejecucion where ( userId = ? ) order by fecha DESC LIMIT 1";
 		$inputarray = array($usuario);
 
-		try{
+		try
+		{
 			$resultado = $db->Execute($sql, $inputarray)->GetArray();
 			$execID = $resultado[0]["execID"];
 
-		}catch(exception $e){
+		} catch(exception $e) {
 			Logger::error($e);
 			return array("result" => "error", "reason" => "Error al hacer la consulta");
 		}
 
 		if (!empty($_FILES))
 		{
-			if (!move_uploaded_file($_FILES['Filedata']['tmp_name'], PATH_TO_CODIGOS. $execID . "." . $lang  ))
+			if (!move_uploaded_file($_FILES['Filedata']['tmp_name'], PATH_TO_CODIGOS. $execID . "." . $lang))
 			{
 				return array("result" => "error", "reason" => "Error al subir el archivo");
 			}
-		}
-		else
-		{
+		} else {
 			// Crear un archivo y escribir el contenido
 			if (file_put_contents(PATH_TO_CODIGOS . "/" . $execID . "." . $lang, $request['plain_source']) === false)
 			{
@@ -277,10 +283,9 @@ class c_ejecucion extends c_controller
 			}
 		}
 
-		Logger::info("Nueva ejecucion " . $execID);
+		Logger::info("Nueva ejecución " . $execID);
 		return array("result" => "ok", "execID" => $execID);
 	}
-
 
 }
 
