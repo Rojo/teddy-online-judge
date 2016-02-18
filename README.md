@@ -33,7 +33,7 @@ Después de eso Teddy estará corriendo en http://127.0.0.1:8080/
 
 ### Conectarse a la terminal
 ```
-  $ docker exec -i -t deploy_teddy_runner bash
+  $ docker exec -i -t deploy_runner_1 bash
 ```
 
 ## API
