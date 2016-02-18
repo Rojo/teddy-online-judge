@@ -69,21 +69,21 @@
 					<br>
 					Lenguaje:
 					<select id="lang">
-						<option value="c">C</option>
-						<option value="cpp">C++</option>
-						<option value="cs">C#</option>
-						<option value="cr">Crystal</option>
-						<option value="ex">Elixir</option>
-						<option value="erl">Erlang</option>
-						<option value="go">Go</option>
-						<option value="java">Java</option>
-						<option value="js">Javascript</option>
-						<option value="php">PHP</option>
-						<option value="pl">Perl</option>
-						<option value="py">Python</option>
-						<option value="rb">Ruby</option>
-						<option value="rs">Rust</option>
-						<option value="swift">Swift</option>
+						<option value=".c">C</option>
+						<option value=".cpp">C++</option>
+						<option value=".cs">C#</option>
+						<option value=".cr">Crystal</option>
+						<option value=".ex">Elixir</option>
+						<option value=".erl">Erlang</option>
+						<option value=".go">Go</option>
+						<option value=".java">Java</option>
+						<option value=".js">Javascript</option>
+						<option value=".php">PHP</option>
+						<option value=".pl">Perl</option>
+						<option value=".py">Python</option>
+						<option value=".rb">Ruby</option>
+						<option value=".rs">Rust</option>
+						<option value=".swift">Swift</option>
 					</select>
 				</div>
 			<?php

@@ -39,7 +39,7 @@ public class Teddy {
 				System.out.println("--------------------------");
 				System.out.println("");
 				System.out.println("Usage:");
-				System.out.println(" -d       Modo de debug basico");
+				System.out.println(" -d       Modo de debug básico");
 				System.out.println(" -df      Modo de debug completo");
 				System.out.println(" -h       Ayuda");
 				System.exit(1);
@@ -66,11 +66,11 @@ public class Teddy {
 			con = iniciarConexion();
 			terminarConexion();
 		} catch (Exception e) {
-			TeddyLog.logger.error("Imposible iniciar conexcion con la BD:" + e);
+			TeddyLog.logger.error("Imposible iniciar conexión con la BD:" + e);
 			System.exit(1);
 		}
 
-		TeddyLog.logger.info("Directorios y BD OK, iniciando ejecucion.");
+		TeddyLog.logger.info("Directorios y BD OK, iniciando ejecución.");
 
 		while(true) {
 			try {
@@ -148,7 +148,7 @@ public class Teddy {
 		String concursoID;
 
 		try {
-			TeddyLog.logger.debug("Conectandose a la base de datos.");
+			TeddyLog.logger.debug("Conectándose a la base de datos.");
 			con = iniciarConexion();
 		} catch(Exception e) {
 			TeddyLog.logger.error("Error al iniciar:");
@@ -191,20 +191,19 @@ public class Teddy {
 		TeddyLog.logger.debug("execID     : " + execID);
 		TeddyLog.logger.debug("concursoID : " + concursoID);
 		TeddyLog.logger.debug("probID : " + probID);
-		TeddyLog.logger.debug("lenguage : " + LANG);
+		TeddyLog.logger.debug("language : " + LANG);
 		TeddyLog.logger.debug("userID : " + userID);
 
-		// crear un directorio para trabajar con ese codigo
+		// crear un directorio para trabajar con ese código
 		File directorio = new File("/var/tmp/teddy/work_zone/" + execID);
 		directorio.setWritable(true);
 		directorio.mkdir();
-		// directorio.deleteOnExit();
 
-		// crear un objeto File de el codigo fuente que se ha subido en la primer carpeta
+		// crear un objeto File del código fuente que se ha subido en la primer carpeta
 		File cf = new File( "/usr/teddy/codigos/" + fileName);
 		cf.setWritable(true);
 
-		// crer un objeto File donde se guardara el codigo fuente para ser compilado dentro de su sub-carpeta
+		// crear un objeto File donde se guardara el código fuente para ser compilado dentro de su sub-carpeta
 		File cfNuevo = new File(directorio, fileName);
 		try {
 			cfNuevo.createNewFile();
@@ -221,7 +220,7 @@ public class Teddy {
 
 			String contents = "";
 			while((contents = br.readLine()) != null) {
-				// aqui puedo ir revisando linea por linea por codigo malicioso
+				// aquí puedo ir revisando linea por linea por código malicioso
 				pw.println( contents );
 			}
 
@@ -229,13 +228,13 @@ public class Teddy {
 			pw.close();
 
 		} catch(FileNotFoundException fnfe) {
-			TeddyLog.logger.fatal("No se ha podido leer el archivo de codigo fuente." );
+			TeddyLog.logger.fatal("No se ha podido leer el archivo de código fuente." );
 			TeddyLog.logger.fatal(fnfe);
 			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
 			return;
 
 		} catch(IOException ioe) {
-			TeddyLog.logger.info("Error al transcribir el codigo fuente." + ioe);
+			TeddyLog.logger.info("Error al transcribir el código fuente." + ioe);
 			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
 			return;
 		}
@@ -326,10 +325,10 @@ public class Teddy {
 		// eliminar el archivo de entrada al terminar el proceso
 		archivoEntrada.deleteOnExit();
 
-		// --------------ejecutar lo que salga de la compilacion -----------------------------------//
-		TeddyLog.logger.info("Ejecutando el codigo del concursante ...");
+		// --------------ejecutar lo que salga de la compilación -----------------------------------//
+		TeddyLog.logger.info("Ejecutando el código del concursante ...");
 
-		// aqui esta lo bueno, ejecutar el codigo... sniff
+		// aquí esta lo bueno, ejecutar el código... sniff
 		// por el momento al la clase ejecutar solo le pasaremos
 		// el execID y con eso ejecutara el Main que este dentro o el a.out etc
 		Ejecutar e = new Ejecutar(execID);
@@ -370,12 +369,12 @@ public class Teddy {
 
 		// la varibale e.status contiene:
 		// 	TIEMPO 		si sobrepaso el limite de tiempo
-		// 	JUEZ_ERROR 	si surgio un error interno del juez
+		// 	JUEZ_ERROR 	si surgió un error interno del juez
 		// 	EXCEPTION 	si el programa evaluado arrojo una exception
 
 		TeddyLog.logger.debug("resultado: "+ e.status);
 
-		// revisar distintos casos despues de ejecutar el programa
+		// revisar distintos casos después de ejecutar el programa
 		if (e.status.equals("TIME") ) {
 			// no cumplio en el tiempo
 			TeddyLog.logger.info("TIEMPO");
@@ -425,14 +424,14 @@ public class Teddy {
 		// COMPROBAR SALIDA
 		TeddyLog.logger.debug("comprobando salida...");
 
-		// si seguimos hasta aca, entonces ya solo resta compara el resultado
+		// si seguimos hasta acá, entonces ya solo resta compara el resultado
 		// del programa con la variable salida
 		String salidaTotal = "";
 
 		int flag = 0;
 		boolean erroneo = false;
 
-		// leer los contenidos del archivo ke genero el programa he ir comparando linea por linea con la respuesta
+		// leer los contenidos del archivo que genero el programa he ir comparando linea por linea con la respuesta
 		try {
 			BufferedReader salidaDePrograma = new BufferedReader(new FileReader(new File(directorio, "data.out")));
 			BufferedReader salidaCorrecta = new BufferedReader(new FileReader("/usr/teddy/casos/" + probID + ".out"));
@@ -477,7 +476,7 @@ public class Teddy {
 			return;
 		}
 
-		TeddyLog.logger.debug("erroneo : "+erroneo);
+		TeddyLog.logger.debug("erróneo : "+erroneo);
 
 		if ( !erroneo ) {
 			// programa correcto !
@@ -508,7 +507,7 @@ public class Teddy {
 			}
 
 			// TeddyLog.logger.info(intentos+ " "+ aciertos);
-			// si no es asi, entonces sumarle uno
+			// si no es así, entonces sumarle uno
 
 			if ( aciertos == 1 ) {
 				con.update("UPDATE Usuario SET solved = solved + 1  WHERE userID = '"+ userID +"' LIMIT 1 ;");
@@ -528,7 +527,7 @@ public class Teddy {
 			con.update("UPDATE Ejecucion SET status = 'INCORRECTO', tiempo = "+ tiempoTotal +"  WHERE execID = "+ execID +" LIMIT 1 ;");
 		}
 
-		// fin, terminar la conexion con la base de datos
+		// fin, terminar la conexión con la base de datos
 		terminarConexion();
 		vaciarCarpeta( execID );
 	}
@@ -541,7 +540,7 @@ public class Teddy {
 	}
 
 	private static void terminarConexion() {
-		// terminar la conexion con la base de datos
+		// terminar la conexión con la base de datos
 		try {
 			con.cerrar();
 		} catch(Exception e) {

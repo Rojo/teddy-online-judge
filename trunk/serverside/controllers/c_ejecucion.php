@@ -207,21 +207,21 @@ class c_ejecucion extends c_controller
 		$lang_desc = null;
 		switch($lang)
 		{
-			case "c"     : $lang_desc = "C";          break;
-			case "cpp"   : $lang_desc = "C++";        break;
-			case "cs"    : $lang_desc = "C#";         break;
-			case "cr"		 : $lang_desc = "Crystal";    break;
-			case "ex"		 : $lang_desc = "Elixir";     break;
-			case "erl"	 : $lang_desc = "Erlang";     break;
-			case "go"    : $lang_desc = "Go";         break;
-			case "java"  : $lang_desc = "Java";       break;
-			case "js"    : $lang_desc = "Javascript"; break;
-			case "pl"    : $lang_desc = "Perl";       break;
-			case "php"   : $lang_desc = "PHP";        break;
-			case "py"    : $lang_desc = "Python";     break;
-			case "rb"    : $lang_desc = "Ruby";       break;
-			case "rs"    : $lang_desc = "Rust";       break;
-			case "swift" : $lang_desc = "Swift";      break;
+			case ".c"     : $lang_desc = "C";          break;
+			case ".cpp"   : $lang_desc = "C++";        break;
+			case ".cs"    : $lang_desc = "C#";         break;
+			case ".cr"	  : $lang_desc = "Crystal";    break;
+			case ".ex"	  : $lang_desc = "Elixir";     break;
+			case ".erl"	  : $lang_desc = "Erlang";     break;
+			case ".go"    : $lang_desc = "Go";         break;
+			case ".java"  : $lang_desc = "Java";       break;
+			case ".js"    : $lang_desc = "Javascript"; break;
+			case ".pl"    : $lang_desc = "Perl";       break;
+			case ".php"   : $lang_desc = "PHP";        break;
+			case ".py"    : $lang_desc = "Python";     break;
+			case ".rb"    : $lang_desc = "Ruby";       break;
+			case ".rs"    : $lang_desc = "Rust";       break;
+			case ".swift" : $lang_desc = "Swift";      break;
 			default:
 				return array("result" => "error", "reason" =>"\"" . $lang . "\" no es un lenguaje reconocido por Teddy.");
 		}
