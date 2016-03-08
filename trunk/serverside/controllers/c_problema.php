@@ -28,11 +28,11 @@ class c_problema extends c_controller
 		if (array_key_exists("problema", $request)) {
 			$problemaValidator->check($request["problema"]);
 		} else{
-			throw new InvalidArgumentException("Falta redaccion de problema");
+			throw new InvalidArgumentException("Falta redacción de problema");
 		}
 
 		if (!array_key_exists("tiempoLimite", $request)) {
-			throw new InvalidArgumentException("Falta tiempolimite");
+			throw new InvalidArgumentException("Falta tiempo limite");
 		}
 
 		return true;
@@ -178,9 +178,9 @@ class c_problema extends c_controller
 
 	public static function mejoresTiempos($request = null)
 	{
-		$sql = "SELECT DISTINCT 
+		$sql = "SELECT DISTINCT
 			`userID`, `execID` , `status` , MIN(`tiempo`) as 'tiempo', fecha, `LANG`
-			FROM 
+			FROM
 			`Ejecucion`
 			WHERE
 			( probID = ? AND STATUS =  'OK' )

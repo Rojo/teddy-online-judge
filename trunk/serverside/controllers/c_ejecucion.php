@@ -270,13 +270,13 @@ class c_ejecucion extends c_controller
 
 		if (!empty($_FILES))
 		{
-			if (!move_uploaded_file($_FILES['Filedata']['tmp_name'], PATH_TO_CODIGOS. $execID . "." . $lang))
+			if (!move_uploaded_file($_FILES['Filedata']['tmp_name'], PATH_TO_CODIGOS . $execID . $lang))
 			{
 				return array("result" => "error", "reason" => "Error al subir el archivo");
 			}
 		} else {
 			// Crear un archivo y escribir el contenido
-			if (file_put_contents(PATH_TO_CODIGOS . "/" . $execID . "." . $lang, $request['plain_source']) === false)
+			if (file_put_contents(PATH_TO_CODIGOS . "/" . $execID . $lang, $request['plain_source']) === false)
 			{
 				Logger::Error("file_put_contents() fallo, tal vez no puedo escribir en  :".PATH_TO_CODIGOS);
 				return array("result" => "error");

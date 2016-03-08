@@ -88,19 +88,19 @@ public class Teddy {
 		String s, tempString, server = null, login = null, password = null, bd = null;
 
 		while ((s = br.readLine()) != null) {
-			if(s.indexOf("$TEDDY_DB_SERVER") != -1){
+			if (s.indexOf("$TEDDY_DB_SERVER") != -1) {
 				server = s.substring(s.indexOf('\"') + 1, s.lastIndexOf('\"') );
 			}
 
-			if(s.indexOf("$TEDDY_DB_USER") != -1){
+			if (s.indexOf("$TEDDY_DB_USER") != -1) {
 				login = s.substring(s.indexOf('\"') + 1, s.lastIndexOf('\"') );
 			}
 
-			if(s.indexOf("$TEDDY_DB_PASS") != -1){
+			if (s.indexOf("$TEDDY_DB_PASS") != -1) {
 				password = s.substring(s.indexOf('\"') + 1, s.lastIndexOf('\"') );
 			}
 
-			if(s.indexOf("$TEDDY_DB_NAME") != -1){
+			if (s.indexOf("$TEDDY_DB_NAME") != -1) {
 				bd = s.substring(s.indexOf('\"') + 1, s.lastIndexOf('\"') );
 			}
 		}
@@ -176,50 +176,50 @@ public class Teddy {
 			probID = rs.getString("probID");
 			concursoID = rs.getString("Concurso");
 
-		} catch(SQLException sqle) {
+		} catch (SQLException sqle) {
 			TeddyLog.logger.info("Error al contactar la BD:" + sqle);
 			return;
 		}
 
 		// Crear el nombre del archivo
 		String fileName = execID + languages.get(LANG);
-		String rawFileName = 	"";
 
 		// es un concurso ?
 		boolean concurso = !concursoID.equals("-1");
 
-		TeddyLog.logger.debug("execID     : " + execID);
-		TeddyLog.logger.debug("concursoID : " + concursoID);
-		TeddyLog.logger.debug("probID : " + probID);
-		TeddyLog.logger.debug("language : " + LANG);
-		TeddyLog.logger.debug("userID : " + userID);
+		TeddyLog.logger.info("execID     : " + execID);
+		TeddyLog.logger.info("concursoID : " + concursoID);
+		TeddyLog.logger.info("probID     : " + probID);
+		TeddyLog.logger.info("language   : " + LANG);
+		TeddyLog.logger.info("userID     : " + userID);
+		TeddyLog.logger.info("fileName   : " + fileName);
 
 		// crear un directorio para trabajar con ese código
-		File directorio = new File("/var/tmp/teddy/work_zone/" + execID);
-		directorio.setWritable(true);
-		directorio.mkdir();
+		File workingDirectory = new File("/var/tmp/teddy/work_zone/" + execID);
+		workingDirectory.setWritable(true);
+		workingDirectory.mkdir();
 
 		// crear un objeto File del código fuente que se ha subido en la primer carpeta
-		File cf = new File( "/usr/teddy/codigos/" + fileName);
-		cf.setWritable(true);
+		File sourceFile = new File( "/usr/teddy/codigos/" + fileName);
+		sourceFile.setWritable(true);
 
 		// crear un objeto File donde se guardara el código fuente para ser compilado dentro de su sub-carpeta
-		File cfNuevo = new File(directorio, fileName);
+		File workingFile = new File(workingDirectory, fileName);
 		try {
-			cfNuevo.createNewFile();
-		} catch(IOException ioe) {
-			TeddyLog.logger.fatal("Error al escribir en el disco duro archivo " + cfNuevo);
+			workingFile.createNewFile();
+		} catch (IOException ioe) {
+			TeddyLog.logger.fatal("Error al escribir en el disco duro archivo " + workingFile);
 			TeddyLog.logger.fatal(ioe);
 			return;
 		}
 
 		// copiar linea por linea el contenido en el archivo del work_zone
 		try {
-			BufferedReader br = new BufferedReader(new FileReader( cf ));
-			PrintWriter pw = new PrintWriter( cfNuevo );
+			BufferedReader br = new BufferedReader(new FileReader( sourceFile ));
+			PrintWriter pw = new PrintWriter( workingFile );
 
 			String contents = "";
-			while((contents = br.readLine()) != null) {
+			while ((contents = br.readLine()) != null) {
 				// aquí puedo ir revisando linea por linea por código malicioso
 				pw.println( contents );
 			}
@@ -227,36 +227,36 @@ public class Teddy {
 			pw.flush();
 			pw.close();
 
-		} catch(FileNotFoundException fnfe) {
+		} catch (FileNotFoundException fnfe) {
 			TeddyLog.logger.fatal("No se ha podido leer el archivo de código fuente." );
 			TeddyLog.logger.fatal(fnfe);
 			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
 			return;
 
-		} catch(IOException ioe) {
+		} catch (IOException ioe) {
 			TeddyLog.logger.info("Error al transcribir el código fuente." + ioe);
 			con.update("UPDATE Ejecucion SET status = 'ERROR' WHERE execID = "+ execID +" LIMIT 1 ;");
 			return;
 		}
 
 		// ok todo va bien, ahora si poner las cosas en la base de datos de todo lo que he hecho
-		// ponerlo como que estoy jueseando
+		// ponerlo como que estoy juzgando
 		con.update("UPDATE Ejecucion SET status = 'JUDGING' WHERE execID = "+ execID +" LIMIT 1 ;");
 
 		// agregar un nuevo intento a ese problema
 		con.update("UPDATE Problema SET intentos = (intentos + 1) WHERE probID = "+ probID +" LIMIT 1 ");
 
-		// agregar un nuevo intento a este chavo
+		// agregar un nuevo intento a este usuario
 		con.update("UPDATE Usuario SET tried = tried + 1  WHERE userID = '"+ userID +"' LIMIT 1 ;");
 
-		// --------------compile el codigo fuente-----------------------------------//
+		// --------------compile el código fuente-----------------------------------//
 
 		// obvio depende de que voy a compile
 
-		// al constructor se le proporciona la ruta hasta el .java
+		// al constructor se le proporciona la ruta hasta el .codigo_fuente
 		Compilador c = new Compilador();
 		c.setLang( LANG );
-		c.setFile( "/var/tmp/teddy/work_zone/" + execID +"/" + fileName );
+		c.setFile( "/var/tmp/teddy/work_zone/" + execID + "/" + fileName );
 		c.setRunId(execID);
 
 		// verificar si compilo bien o no
@@ -266,15 +266,15 @@ public class Teddy {
 			// no compilo, actualizar la base de datos
 			con.update("UPDATE Ejecucion SET status = 'COMPILACION' WHERE execID = "+ execID +" LIMIT 1 ;");
 
-			// cerrar la conexion a la base
+			// cerrar la conexión a la base
 			terminarConexion();
 
 			// salir
 			return;
 		}
 
-		// brindarle los datos de entrada ahi en la carpeta
-		// esos datos estan en la base de datos
+		// brindarle los datos de entrada ahí en la carpeta
+		// esos datos están en la base de datos
 		String titulo ;
 		int tiempoLimite;
 
@@ -284,14 +284,14 @@ public class Teddy {
 			titulo  = rs.getString("titulo");
 			tiempoLimite = Integer.parseInt ( rs.getString("tiempoLimite") );
 
-		} catch(SQLException sqle) {
+		} catch (SQLException sqle) {
 
 			TeddyLog.logger.fatal("Error al contactar la BD.");
 			return;
 		}
 
 		// generar el archivo de entrada para el programa
-		File archivoEntrada = new File(directorio, "data.in");
+		File archivoEntrada = new File(workingDirectory, "data.in");
 		try {
 			archivoEntrada.createNewFile();
 		} catch(IOException ioe) {
@@ -376,7 +376,7 @@ public class Teddy {
 
 		// revisar distintos casos después de ejecutar el programa
 		if (e.status.equals("TIME") ) {
-			// no cumplio en el tiempo
+			// no cumplió en el tiempo
 			TeddyLog.logger.info("TIEMPO");
 			TeddyLog.logger.info("Tu programa fue detenido a los "+tiempoTotal+"ms");
 
@@ -433,7 +433,7 @@ public class Teddy {
 
 		// leer los contenidos del archivo que genero el programa he ir comparando linea por linea con la respuesta
 		try {
-			BufferedReader salidaDePrograma = new BufferedReader(new FileReader(new File(directorio, "data.out")));
+			BufferedReader salidaDePrograma = new BufferedReader(new FileReader(new File(workingDirectory, "data.out")));
 			BufferedReader salidaCorrecta = new BufferedReader(new FileReader("/usr/teddy/casos/" + probID + ".out"));
 
 			String foo = null;
@@ -462,7 +462,7 @@ public class Teddy {
 				}
 			}
 
-		} catch(IOException ioe) {
+		} catch (IOException ioe) {
 
 			TeddyLog.logger.info("NO SALIDA");
 			TeddyLog.logger.warn(ioe);
@@ -476,7 +476,7 @@ public class Teddy {
 			return;
 		}
 
-		TeddyLog.logger.debug("erróneo : "+erroneo);
+		TeddyLog.logger.debug("erróneo : " + erroneo);
 
 		if ( !erroneo ) {
 			// programa correcto !
